@@ -1,0 +1,31 @@
+body {
+  background-color: #fefefe;
+}
+
+a {
+  text-decoration: none;
+}
+
+#minimal {
+  text-align: center;
+}
+
+#minimal .wrapper {
+  height: 100%;
+}
+
+#minimal h1 {
+  margin-top: 2em;
+}
+
+#minimal .lead {
+  margin-top: 1em;
+}
+
+#minimal #facebook-login {
+  margin-top: 1em;
+}
+
+#minimal .lead {
+  font-size: 1.5em;
+}
