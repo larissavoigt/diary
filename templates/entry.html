@@ -11,35 +11,70 @@
     <title>MyDiary</title>
   </head>
   <body>
-<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-  <header class="mdl-layout__header">
-      <div class="mdl-layout__header-row">
-        <span class="mdl-layout-title">Title</span>
-        <div class="mdl-layout-spacer"></div>
-        <nav class="mdl-navigation mdl-layout--large-screen-only">
-          <a class="mdl-navigation__link" href="#">Link</a>
-          <a class="mdl-navigation__link" href="#">Link</a>
-          <a class="mdl-navigation__link" href="#">Link</a>
-          <a class="mdl-navigation__link" href="#">Link</a>
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+      <header class="mdl-layout__header">
+        <div class="mdl-layout__header-row">
+          <span class="mdl-layout-title">New Diary Entry</span>
+          <!--
+          <div class="mdl-layout-spacer"></div>
+          <nav class="mdl-navigation mdl-layout--large-screen-only">
+            <a class="mdl-navigation__link" href="#">Link</a>
+            <a class="mdl-navigation__link" href="#">Link</a>
+            <a class="mdl-navigation__link" href="#">Link</a>
+            <a class="mdl-navigation__link" href="#">Link</a>
+          </nav>
+          -->
+        </div>
+      </header>
+      <div class="mdl-layout__drawer">
+        <span class="mdl-layout-title">MyDiary</span>
+        <nav class="mdl-navigation">
+          <a class="mdl-navigation__link" href="#">Previous Entries</a>
+          <a class="mdl-navigation__link" href="/">Sign out</a>
         </nav>
       </div>
-    </header>
-    <div class="mdl-layout__drawer">
-      <span class="mdl-layout-title">Title</span>
-      <nav class="mdl-navigation">
-        <a class="mdl-navigation__link" href="#">Link</a>
-        <a class="mdl-navigation__link" href="#">Link</a>
-        <a class="mdl-navigation__link" href="#">Link</a>
-        <a class="mdl-navigation__link" href="#">Link</a>
-      </nav>
-    </div>
-    <main class="mdl-layout__content">
-      <div class="page-content"><!-- Your content goes here --></div>
-      <h1>How are you feeling?</h1>
-      <p style="width:300px">
-      <input class="mdl-slider mdl-js-slider" type="range"
-        min="0" max="100" value="50" tabindex="0"/>
-        </main>
+      <main class="mdl-layout__content">
+      <div class="page-content">
+        <h3>How are you feeling?</h3>
+        <form action="#">
+          <input id="mood" class="mdl-slider mdl-js-slider" type="range" min="0" max="100" value="50" tabindex="0"/>
+          <small id="mood-name">OK</small>
+          <div class="mdl-textfield mdl-js-textfield">
+            <textarea class="mdl-textfield__input" type="text" rows= "5"></textarea>
+            <label class="mdl-textfield__label">Today was...</label>
+          </div>
+        </form>
       </div>
+      </main>
+    </div>
   </body>
+  <script type="text/javascript" charset="utf-8">
+    (function() {
+      var el = document.getElementById("mood");
+      var name = document.getElementById("mood-name");
+      var ranges = {
+        5: 'Desperately Unhappy',
+        15: 'Very Unhappy',
+        25: 'Unhappy',
+        35: 'Passable',
+        45: 'Quite OK',
+        55: 'OK',
+        65: 'Content',
+        75: 'Cheerful',
+        85: 'Happy',
+        95: 'Delighted',
+        100: 'Blissful'
+      };
+      el.oninput = function() {
+        var v = parseInt(el.value, 10);
+        for (var r in ranges) {
+          if (v <= r) {
+            name.innerHTML = ranges[r];
+            break;
+          }
+        }
+      };
+    }());
+
+  </script>
 </html>

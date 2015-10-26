@@ -29,3 +29,29 @@ a {
 #minimal .lead {
   font-size: 1.5em;
 }
+
+.page-content {
+  width: 400px;
+  margin: 0 auto;
+}
+
+.page-content h3 {
+  text-align: center;
+}
+
+small {
+  display: block;
+  margin-top: 0.3em;
+  text-align: center;
+  color: #666;
+}
+
+.mdl-textfield {
+  margin-top: 1em;
+  width: 100%;
+}
+
+.mdl-textfield label {
+  color: #333;
+  font-size: 1.2em;
+}

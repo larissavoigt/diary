@@ -1,29 +1,32 @@
 package main
 
 import (
-	"html/template"
 	"net/http"
+
+	"github.com/larissavoigt/diary/internal/auth"
+	"github.com/larissavoigt/diary/internal/templates"
 )
 
-type Page struct {
-	Title string
-}
-
 func main() {
-	var tpl = template.Must(template.ParseFiles("templates/index.html"))
+	var tpl = templates.New("templates")
+	auth.Config("1629858967301577", "36b8b62d4a6d62f3e845a2682698749d", "http://localhost:3000")
 
 	fs := http.FileServer(http.Dir("assets"))
 	http.Handle("/assets/", http.StripPrefix("/assets/", fs))
 
-	http.HandleFunc("/about", func(res http.ResponseWriter, req *http.Request) {
-		var page = &Page{"About"}
-		tpl.Execute(res, page)
+	http.HandleFunc("/auth", func(res http.ResponseWriter, req *http.Request) {
+		//code := req.URL.Query().Get("code")
+		//_, err := auth.GetToken(code)
+		tpl.Render(res, "entry", nil)
 	})
 
 	http.HandleFunc("/", func(res http.ResponseWriter, req *http.Request) {
-		var page = &Page{"MyDiary"}
-		tpl.Execute(res, page)
+		p := struct {
+			FacebookURL string
+		}{
+			auth.RedirectURL(),
+		}
+		tpl.Render(res, "index", p)
 	})
-
 	http.ListenAndServe(":3000", nil)
 }
