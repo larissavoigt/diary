@@ -1,24 +1,23 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
+	"text/template"
 )
 
+type Page struct {
+	Title string
+}
+
 func main() {
-	var body string = `
-		<html>
-			<head>
-				<title>My Diary</title>
-			</head>
-			<body>
-				<h1>Hello World %s</h2>
-			</body>
-		</html>
-	`
-	fmt.Println("Hello World!")
+	var tpl = template.Must(template.ParseFiles("templates/index.html"))
+	http.HandleFunc("/about", func(res http.ResponseWriter, req *http.Request) {
+		var page = &Page{"About"}
+		tpl.Execute(res, page)
+	})
 	http.HandleFunc("/", func(res http.ResponseWriter, req *http.Request) {
-		fmt.Fprintf(res, body, req.URL.Query().Get("name"))
+		var page = &Page{"My Diary"}
+		tpl.Execute(res, page)
 	})
 	http.ListenAndServe(":3000", nil)
 }
