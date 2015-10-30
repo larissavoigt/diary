@@ -56,13 +56,22 @@ func GetToken(code string) (string, error) {
 	return t.AccessToken, nil
 }
 
-func SaveSession(res http.ResponseWriter, id string) {
+func SaveSession(w http.ResponseWriter, id string) {
 	cookie := &http.Cookie{
 		Name:     "id",
 		Value:    id,
 		HttpOnly: true,
 	}
-	http.SetCookie(res, cookie)
+	http.SetCookie(w, cookie)
+}
+
+func DestroySession(w http.ResponseWriter) {
+	cookie := &http.Cookie{
+		Name:     "id",
+		MaxAge:   -1,
+		HttpOnly: true,
+	}
+	http.SetCookie(w, cookie)
 }
 
 func CurrenUser(r *http.Request) (*db.User, error) {

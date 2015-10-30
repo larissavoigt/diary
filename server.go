@@ -69,6 +69,11 @@ func main() {
 		}
 	})
 
+	http.HandleFunc("/logout", func(w http.ResponseWriter, r *http.Request) {
+		auth.DestroySession(w)
+		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+	})
+
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case "GET":
