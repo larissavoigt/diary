@@ -30,14 +30,14 @@
       <div class="mdl-layout__drawer">
         <span class="mdl-layout-title">MyDiary</span>
         <nav class="mdl-navigation">
-          <a class="mdl-navigation__link" href="#">Previous Entries</a>
+          <a class="mdl-navigation__link" href="/entries">Previous Entries</a>
           <a class="mdl-navigation__link" href="/logout">Sign out</a>
         </nav>
       </div>
       <main class="mdl-layout__content">
       <div class="page-content">
         <h3>{{.Name.Value}}, how are you feeling?</h3>
-        <form action="/entry" method="POST">
+        <form action="/entries" method="POST">
           <input name="rate" id="mood" class="mdl-slider mdl-js-slider" type="range" min="0" max="100" value="50" tabindex="0"/>
           <small id="mood-name">OK</small>
           <div class="mdl-textfield mdl-js-textfield">

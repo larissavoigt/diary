@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 
 	"golang.org/x/net/context"
@@ -25,33 +24,36 @@ func main() {
 	fs := http.FileServer(http.Dir("assets"))
 	http.Handle("/assets/", http.StripPrefix("/assets/", fs))
 
-	entry := xhandler.HandlerFuncC(func(ctx context.Context, w http.ResponseWriter, r *http.Request) {
+	entries := xhandler.HandlerFuncC(func(ctx context.Context, w http.ResponseWriter, r *http.Request) {
 		u := ctx.Value("user").(*db.User)
 
 		switch r.Method {
 		case "GET":
-			p := r.URL.Path[len("/entry/"):]
-			if p == "" {
+
+			switch r.URL.Path[len("/entries/"):] {
+			case "":
+				fmt.Fprintf(w, "list")
+			case "new":
 				tpl.Render(w, "entry", u)
-			} else {
+			default:
 				fmt.Fprintf(w, "yay")
 			}
+
 		case "POST":
 			rate := r.FormValue("rate")
 			desc := r.FormValue("description")
 			e, err := db.CreateEntry(u.ID, rate, desc)
 			if err != nil {
-				log.Println(err)
-				http.Redirect(w, r, "/entry", 302)
+				tpl.Error(w, err)
 			} else {
-				http.Redirect(w, r, "/entry/"+e, 302)
+				http.Redirect(w, r, "/entries/"+e, 302)
 			}
 		default:
 			http.Error(w, "", http.StatusMethodNotAllowed)
 		}
 	})
 
-	http.Handle("/entry/", c.Handler(entry))
+	http.Handle("/entries/", c.Handler(entries))
 
 	http.HandleFunc("/auth", func(w http.ResponseWriter, r *http.Request) {
 		code := r.URL.Query().Get("code")
@@ -64,7 +66,7 @@ func main() {
 				tpl.Error(w, err)
 			} else {
 				auth.SaveSession(w, id)
-				http.Redirect(w, r, "/entry", http.StatusFound)
+				http.Redirect(w, r, "/entries/new", http.StatusFound)
 			}
 		}
 	})
@@ -75,15 +77,14 @@ func main() {
 	})
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		switch r.Method {
-		case "GET":
+		if r.Method == "GET" {
 			if r.URL.Path != "/" {
 				tpl.NotFound(w)
 				return
 			}
 			_, err := auth.CurrenUser(r)
 			if err == nil {
-				http.Redirect(w, r, "/entry", 302)
+				http.Redirect(w, r, "/entries/new", 302)
 			} else {
 				p := struct {
 					FacebookURL string
@@ -92,7 +93,7 @@ func main() {
 				}
 				tpl.Render(w, "index", p)
 			}
-		default:
+		} else {
 			http.Error(w, "", http.StatusMethodNotAllowed)
 		}
 	})
