@@ -2,11 +2,20 @@ package db
 
 import (
 	"database/sql"
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"net/http"
 	"strconv"
 )
 import _ "github.com/go-sql-driver/mysql"
 
 var db *sql.DB
+
+type fbres struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
+}
 
 type User struct {
 	ID    int64
@@ -23,7 +32,23 @@ func init() {
 }
 
 func CreateUser(token string) (string, error) {
-	res, err := db.Exec("INSERT INTO users (token) VALUES(?)", token)
+	api := fmt.Sprintf("https://graph.facebook.com/me?access_token=%s", token)
+	r, err := http.Get(api)
+	if err != nil {
+		return "", err
+	}
+	defer r.Body.Close()
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		return "", err
+	}
+	fb := &fbres{}
+	err = json.Unmarshal(body, &fb)
+	if err != nil {
+		return "", err
+	}
+
+	res, err := db.Exec("INSERT INTO users (token, name) VALUES(?, ?)", token, fb.Name)
 	if err != nil {
 		return "", err
 	}
