@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.5/material.indigo-green.min.css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="/assets/css/main.css" />
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
     <script src="https://storage.googleapis.com/code.getmdl.io/1.0.5/material.min.js"></script>
     <title>MyDiary</title>
   </head>
@@ -36,13 +37,14 @@
       <main class="mdl-layout__content">
       <div class="page-content">
         <h3>{{.Name.Value}}, how are you feeling?</h3>
-        <form action="#">
-          <input id="mood" class="mdl-slider mdl-js-slider" type="range" min="0" max="100" value="50" tabindex="0"/>
+        <form action="/entry" method="POST">
+          <input name="rate" id="mood" class="mdl-slider mdl-js-slider" type="range" min="0" max="100" value="50" tabindex="0"/>
           <small id="mood-name">OK</small>
           <div class="mdl-textfield mdl-js-textfield">
-            <textarea class="mdl-textfield__input" type="text" rows= "5"></textarea>
+            <textarea name="description" class="mdl-textfield__input" type="text" rows= "5"></textarea>
             <label class="mdl-textfield__label">Today was...</label>
           </div>
+          <button type="submit" class="mdl-button mdl-button--raised mdl-button--colored">Add</button>
         </form>
       </div>
       </main>

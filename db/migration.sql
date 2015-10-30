@@ -1,10 +1,19 @@
-create database diary;
+CREATE DATABASE diary;
 
-use diary;
+USE diary;
 
-create table users(
-  id int unsigned not null auto_increment primary key,
-  facebook_id varchar(30) not null unique,
-  token text not null,
-  name varchar(255)
+CREATE TABLE users(
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  facebook_id VARCHAR(30) NOT null UNIQUE,
+  token TEXT NOT NULL,
+  name VARCHAR(255),
+  INDEX(facebook_id)
+);
+
+CREATE TABLE entries(
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  user_id INT UNSIGNED NOT NULL,
+  rate INT UNSIGNED NOT NULL,
+  description TEXT,
+  FOREIGN KEY(user_id) REFERENCES users(id)
 );

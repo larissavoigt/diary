@@ -61,6 +61,23 @@ func FindUser(id string) (*User, error) {
 	}
 }
 
+func CreateEntry(id, rate, desc string) (string, error) {
+	n, err := strconv.Atoi(rate)
+	if err != nil {
+		return "", err
+	}
+	res, err := db.Exec(`INSERT INTO entries (user_id, rate, description)
+	VALUES(?, ?, ?)`, id, n, desc)
+	if err != nil {
+		return "", err
+	}
+	e, err := res.LastInsertId()
+	if err != nil {
+		return "", err
+	}
+	return strconv.FormatInt(e, 10), nil
+}
+
 func getFBInfo(token string) (*fbUser, error) {
 	api := fmt.Sprintf("https://graph.facebook.com/me?access_token=%s", token)
 	r, err := http.Get(api)

@@ -29,7 +29,22 @@ func main() {
 			http.Redirect(res, req, "/", 302)
 			return
 		}
-		tpl.Render(res, "entry", user)
+		switch req.Method {
+		case "GET":
+			tpl.Render(res, "entry", user)
+		case "POST":
+			rate := req.FormValue("rate")
+			desc := req.FormValue("description")
+			e, err := db.CreateEntry(id, rate, desc)
+			if err != nil {
+				log.Println(err)
+				http.Redirect(res, req, "/entry", 302)
+			} else {
+				http.Redirect(res, req, "/entry/"+e, 302)
+			}
+		default:
+			http.Error(res, "", http.StatusMethodNotAllowed)
+		}
 	})
 
 	http.HandleFunc("/auth", func(res http.ResponseWriter, req *http.Request) {
