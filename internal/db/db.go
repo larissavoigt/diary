@@ -61,7 +61,7 @@ func FindUser(id string) (*User, error) {
 	}
 }
 
-func CreateEntry(id, rate, desc string) (string, error) {
+func CreateEntry(id int64, rate, desc string) (string, error) {
 	n, err := strconv.Atoi(rate)
 	if err != nil {
 		return "", err

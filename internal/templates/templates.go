@@ -27,9 +27,19 @@ func New(path string) *Templates {
 	return &Templates{t}
 }
 
-func (t *Templates) Render(res http.ResponseWriter, name string, data interface{}) {
-	err := t.ExecuteTemplate(res, name+".html", data)
+func (t *Templates) Render(w http.ResponseWriter, name string, data interface{}) {
+	err := t.ExecuteTemplate(w, name+".html", data)
 	if err != nil {
-		http.Error(res, err.Error(), http.StatusInternalServerError)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
+}
+
+func (t *Templates) NotFound(w http.ResponseWriter) {
+	w.WriteHeader(http.StatusNotFound)
+	t.Render(w, "404", nil)
+}
+
+func (t *Templates) Error(w http.ResponseWriter, err error) {
+	w.WriteHeader(http.StatusInternalServerError)
+	t.Render(w, "500", err)
 }
