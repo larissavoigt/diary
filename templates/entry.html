@@ -1,39 +1,11 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.5/material.indigo-green.min.css" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="/assets/css/main.css" />
-    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-    <script src="https://storage.googleapis.com/code.getmdl.io/1.0.5/material.min.js"></script>
-    <title>MyDiary</title>
+    {{ template "head"}}
   </head>
   <body>
     <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-      <header class="mdl-layout__header">
-        <div class="mdl-layout__header-row">
-          <span class="mdl-layout-title">New Diary Entry</span>
-          <!--
-          <div class="mdl-layout-spacer"></div>
-          <nav class="mdl-navigation mdl-layout--large-screen-only">
-            <a class="mdl-navigation__link" href="#">Link</a>
-            <a class="mdl-navigation__link" href="#">Link</a>
-            <a class="mdl-navigation__link" href="#">Link</a>
-            <a class="mdl-navigation__link" href="#">Link</a>
-          </nav>
-          -->
-        </div>
-      </header>
-      <div class="mdl-layout__drawer">
-        <span class="mdl-layout-title">MyDiary</span>
-        <nav class="mdl-navigation">
-          <a class="mdl-navigation__link" href="/entries">Previous Entries</a>
-          <a class="mdl-navigation__link" href="/logout">Sign out</a>
-        </nav>
-      </div>
+      {{ template "header" }}
       <main class="mdl-layout__content">
       <div class="page-content">
         <h3>{{.FirstName}}, how are you feeling?</h3>
@@ -48,6 +20,7 @@
         </form>
       </div>
       </main>
+      {{ template "footer" }}
     </div>
   </body>
   <script type="text/javascript" charset="utf-8">

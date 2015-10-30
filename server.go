@@ -16,6 +16,7 @@ import (
 func main() {
 	tpl := templates.New("templates")
 
+	// chain authenticated middleware
 	c := xhandler.Chain{}
 	c.UseC(func(next xhandler.HandlerC) xhandler.HandlerC {
 		return auth.NewMiddleware(next)
@@ -25,36 +26,35 @@ func main() {
 	fs := http.FileServer(http.Dir("assets"))
 	http.Handle("/assets/", http.StripPrefix("/assets/", fs))
 
-	entries := xhandler.HandlerFuncC(func(ctx context.Context, w http.ResponseWriter, r *http.Request) {
-		u := ctx.Value("user").(*user.User)
+	http.Handle("/entries/", c.Handler(
+		xhandler.HandlerFuncC(func(ctx context.Context, w http.ResponseWriter, r *http.Request) {
+			u := ctx.Value("user").(*user.User)
 
-		switch r.Method {
-		case "GET":
+			switch r.Method {
+			case "GET":
 
-			switch r.URL.Path[len("/entries/"):] {
-			case "":
-				fmt.Fprintf(w, "list")
-			case "new":
-				tpl.Render(w, "entry", u)
+				switch r.URL.Path[len("/entries/"):] {
+				case "":
+					fmt.Fprintf(w, "list")
+				case "new":
+					tpl.Render(w, "entry", u)
+				default:
+					fmt.Fprintf(w, "yay")
+				}
+
+			case "POST":
+				rate := r.FormValue("rate")
+				desc := r.FormValue("description")
+				e, err := db.CreateEntry(u.ID, rate, desc)
+				if err != nil {
+					tpl.Error(w, err)
+				} else {
+					http.Redirect(w, r, "/entries/"+e, 302)
+				}
 			default:
-				fmt.Fprintf(w, "yay")
+				http.Error(w, "", http.StatusMethodNotAllowed)
 			}
-
-		case "POST":
-			rate := r.FormValue("rate")
-			desc := r.FormValue("description")
-			e, err := db.CreateEntry(u.ID, rate, desc)
-			if err != nil {
-				tpl.Error(w, err)
-			} else {
-				http.Redirect(w, r, "/entries/"+e, 302)
-			}
-		default:
-			http.Error(w, "", http.StatusMethodNotAllowed)
-		}
-	})
-
-	http.Handle("/entries/", c.Handler(entries))
+		})))
 
 	http.HandleFunc("/auth", func(w http.ResponseWriter, r *http.Request) {
 		code := r.URL.Query().Get("code")
