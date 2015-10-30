@@ -1,9 +1,11 @@
 package main
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/larissavoigt/diary/internal/auth"
+	"github.com/larissavoigt/diary/internal/db"
 	"github.com/larissavoigt/diary/internal/templates"
 )
 
@@ -15,16 +17,29 @@ func main() {
 	http.Handle("/assets/", http.StripPrefix("/assets/", fs))
 
 	http.HandleFunc("/auth", func(res http.ResponseWriter, req *http.Request) {
-		//code := req.URL.Query().Get("code")
-		//_, err := auth.GetToken(code)
-		tpl.Render(res, "entry", nil)
+		code := req.URL.Query().Get("code")
+		token, err := auth.GetToken(code)
+		if err != nil {
+			log.Println(err)
+			http.Redirect(res, req, "/", 302)
+			return
+		}
+		_, err = db.CreateUser(token)
+		if err != nil {
+			log.Println(err)
+			http.Redirect(res, req, "/", 302)
+		} else {
+			tpl.Render(res, "entry", nil)
+		}
 	})
 
 	http.HandleFunc("/", func(res http.ResponseWriter, req *http.Request) {
 		p := struct {
 			FacebookURL string
+			User        string
 		}{
 			auth.RedirectURL(),
+			"Visitor",
 		}
 		tpl.Render(res, "index", p)
 	})
