@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/larissavoigt/diary/internal/db"
+	"github.com/larissavoigt/diary/internal/user"
 	"github.com/rs/xhandler"
 
 	"golang.org/x/net/context"
@@ -74,7 +75,7 @@ func DestroySession(w http.ResponseWriter) {
 	http.SetCookie(w, cookie)
 }
 
-func CurrenUser(r *http.Request) (*db.User, error) {
+func CurrenUser(r *http.Request) (*user.User, error) {
 	cookie, err := r.Cookie("id")
 	if err == nil {
 		id := cookie.Value

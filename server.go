@@ -9,6 +9,7 @@ import (
 	"github.com/larissavoigt/diary/internal/auth"
 	"github.com/larissavoigt/diary/internal/db"
 	"github.com/larissavoigt/diary/internal/templates"
+	"github.com/larissavoigt/diary/internal/user"
 	"github.com/rs/xhandler"
 )
 
@@ -25,7 +26,7 @@ func main() {
 	http.Handle("/assets/", http.StripPrefix("/assets/", fs))
 
 	entries := xhandler.HandlerFuncC(func(ctx context.Context, w http.ResponseWriter, r *http.Request) {
-		u := ctx.Value("user").(*db.User)
+		u := ctx.Value("user").(*user.User)
 
 		switch r.Method {
 		case "GET":

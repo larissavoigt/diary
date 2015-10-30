@@ -1,12 +1,14 @@
+DROP DATABASE IF EXISTS diary;
+
 CREATE DATABASE diary;
 
 USE diary;
 
 CREATE TABLE users(
   id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  facebook_id VARCHAR(30) NOT null UNIQUE,
+  facebook_id VARCHAR(30) NOT NULL UNIQUE,
   token TEXT NOT NULL,
-  name VARCHAR(255),
+  name VARCHAR(255) NOT NULL,
   INDEX(facebook_id)
 );
 

@@ -7,6 +7,8 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strconv"
+
+	"github.com/larissavoigt/diary/internal/user"
 )
 import _ "github.com/go-sql-driver/mysql"
 
@@ -15,13 +17,6 @@ var db *sql.DB
 type fbUser struct {
 	ID   string `json:"id"`
 	Name string `json:"name"`
-}
-
-type User struct {
-	ID         int64
-	FacebookID string
-	Token      string
-	Name       sql.NullString
 }
 
 func init() {
@@ -50,8 +45,8 @@ func CreateUser(token string) (string, error) {
 	return strconv.FormatInt(id, 10), nil
 }
 
-func FindUser(id string) (*User, error) {
-	u := &User{}
+func FindUser(id string) (*user.User, error) {
+	u := &user.User{}
 	err := db.QueryRow("SELECT * FROM users WHERE id=?", id).Scan(
 		&u.ID, &u.FacebookID, &u.Token, &u.Name)
 	if err != nil {
