@@ -16,6 +16,22 @@ func main() {
 	fs := http.FileServer(http.Dir("assets"))
 	http.Handle("/assets/", http.StripPrefix("/assets/", fs))
 
+	http.HandleFunc("/entry", func(res http.ResponseWriter, req *http.Request) {
+		id, err := auth.CurrentUser(req)
+		if err != nil {
+			log.Println(err)
+			http.Redirect(res, req, "/", 302)
+			return
+		}
+		user, err := db.FindUser(id)
+		if err != nil {
+			log.Println(err)
+			http.Redirect(res, req, "/", 302)
+			return
+		}
+		tpl.Render(res, "entry", user)
+	})
+
 	http.HandleFunc("/auth", func(res http.ResponseWriter, req *http.Request) {
 		code := req.URL.Query().Get("code")
 		token, err := auth.GetToken(code)
@@ -24,22 +40,21 @@ func main() {
 			http.Redirect(res, req, "/", 302)
 			return
 		}
-		_, err = db.CreateUser(token)
+		id, err := db.CreateUser(token)
 		if err != nil {
 			log.Println(err)
 			http.Redirect(res, req, "/", 302)
 		} else {
-			tpl.Render(res, "entry", nil)
+			auth.SaveSession(res, id)
+			http.Redirect(res, req, "/entry", 302)
 		}
 	})
 
 	http.HandleFunc("/", func(res http.ResponseWriter, req *http.Request) {
 		p := struct {
 			FacebookURL string
-			User        string
 		}{
 			auth.RedirectURL(),
-			"Visitor",
 		}
 		tpl.Render(res, "index", p)
 	})
