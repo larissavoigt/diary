@@ -17,5 +17,6 @@ CREATE TABLE entries(
   user_id INT UNSIGNED NOT NULL,
   rate INT UNSIGNED NOT NULL,
   description TEXT,
+  created_at TIMESTAMP NOT NULL,
   FOREIGN KEY(user_id) REFERENCES users(id)
 );

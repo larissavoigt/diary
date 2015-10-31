@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/larissavoigt/diary/internal/entry"
 	"github.com/larissavoigt/diary/internal/user"
@@ -22,7 +23,7 @@ type fbUser struct {
 
 func init() {
 	var err error
-	db, err = sql.Open("mysql", "root:@/diary")
+	db, err = sql.Open("mysql", "root:@/diary?parseTime=true")
 	if err != nil {
 		panic(err)
 	}
@@ -62,8 +63,8 @@ func CreateEntry(id int64, rate, desc string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	res, err := db.Exec(`INSERT INTO entries (user_id, rate, description)
-	VALUES(?, ?, ?)`, id, n, desc)
+	res, err := db.Exec(`INSERT INTO entries (user_id, rate, description, created_at)
+	VALUES(?, ?, ?, ?)`, id, n, desc, time.Now())
 	if err != nil {
 		return "", err
 	}
@@ -76,14 +77,14 @@ func CreateEntry(id int64, rate, desc string) (string, error) {
 
 func FindUserEntries(id int64) ([]entry.Entry, error) {
 	var entries []entry.Entry
-	rows, err := db.Query("select id, rate, description from entries where user_id = ? ORDER BY id DESC LIMIT 10", id)
+	rows, err := db.Query("select id, rate, description, created_at from entries where user_id = ? ORDER BY id DESC LIMIT 10", id)
 	if err != nil {
 		return entries, err
 	}
 	defer rows.Close()
 	for rows.Next() {
 		e := entry.Entry{}
-		err := rows.Scan(&e.ID, &e.Rate, &e.Description)
+		err := rows.Scan(&e.ID, &e.Rate, &e.Description, &e.CreatedAt)
 		if err != nil {
 			return entries, err
 		}

@@ -11,7 +11,7 @@
         <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
           <thead>
             <tr>
-              <th>ID</th>
+              <th>#</th>
               <th>Rate</th>
               <th>Description</th>
             </tr>
@@ -19,7 +19,7 @@
           <tbody>
             {{ range . }}
             <tr>
-              <td>{{.ID}}</td>
+              <td>{{.Timestamp}}</td>
               <td>{{.Rate}}</td>
               <td>{{.Description.Value}}</td>
             </tr>
