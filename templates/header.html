@@ -1,24 +1,7 @@
 {{define "header"}}
-<header class="mdl-layout__header">
-  <div class="mdl-layout__header-row">
-    <span class="mdl-layout-title">Diary</span>
-    <!--
-    <div class="mdl-layout-spacer"></div>
-    <nav class="mdl-navigation mdl-layout--large-screen-only">
-      <a class="mdl-navigation__link" href="#">Link</a>
-      <a class="mdl-navigation__link" href="#">Link</a>
-      <a class="mdl-navigation__link" href="#">Link</a>
-      <a class="mdl-navigation__link" href="#">Link</a>
-    </nav>
-    -->
-  </div>
+<header class="bar bar-nav">
+  <a class="icon icon-more pull-left" href="/menu"  data-transition="slide-out"></a>
+  <a class="icon icon-compose pull-right" href="/entries/new" data-ignore="push"></a>
+  <h1 class="title">MyDiary</h1>
 </header>
-<div class="mdl-layout__drawer">
-  <span class="mdl-layout-title">MyDiary</span>
-  <nav class="mdl-navigation">
-    <a class="mdl-navigation__link" href="/entries/new">New Entry</a>
-    <a class="mdl-navigation__link" href="/entries">Previous Entries</a>
-    <a class="mdl-navigation__link" href="/logout">Sign out</a>
-  </nav>
-</div>
 {{end}}

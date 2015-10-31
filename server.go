@@ -40,6 +40,16 @@ func main() {
 	fs := http.FileServer(http.Dir("assets"))
 	http.Handle("/assets/", http.StripPrefix("/assets/", fs))
 
+	http.Handle("/menu/", c.Handler(
+		xhandler.HandlerFuncC(func(ctx context.Context, w http.ResponseWriter, r *http.Request) {
+			switch r.Method {
+			case "GET":
+				tpl.Render(w, "menu", nil)
+			default:
+				http.Error(w, "", http.StatusMethodNotAllowed)
+			}
+		})))
+
 	http.Handle("/entries/", c.Handler(
 		xhandler.HandlerFuncC(func(ctx context.Context, w http.ResponseWriter, r *http.Request) {
 			u := ctx.Value("user").(*user.User)

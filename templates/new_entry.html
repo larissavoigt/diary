@@ -2,31 +2,31 @@
 <html>
   <head>
     {{ template "head"}}
+    <title>New Entry - MyDiary</title>
   </head>
   <body>
-    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-      {{ template "header" }}
-      <main class="mdl-layout__content">
-      <div class="page-content">
+    {{ template "header" }}
+
+    <div class="content">
+
+      <div class="content-padded">
         <h3>{{.FirstName}}, how are you feeling?</h3>
+
         <form action="entries" method="POST">
-          <input name="rate" id="mood" class="mdl-slider mdl-js-slider" type="range" min="0" max="100" value="50" tabindex="0"/>
-          <small id="mood-name">OK</small>
-          <div class="mdl-textfield mdl-js-textfield">
-            <textarea name="description" class="mdl-textfield__input" type="text" rows= "5"></textarea>
-            <label class="mdl-textfield__label">Today was...</label>
-          </div>
-          <button type="submit" class="mdl-button mdl-button--raised mdl-button--colored">Add</button>
+          <input name="rate" id="rate" type="range" min="0" max="100" value="50" tabindex="0"/>
+          <label for="rate" id="rate-label">OK</label>
+
+          <textarea name="description" type="text" rows= "5"></textarea>
+          <button class="btn btn-positive btn-block">Add Entry</button>
         </form>
       </div>
-      </main>
-      {{ template "footer" }}
+
     </div>
-  </body>
+
   <script type="text/javascript" charset="utf-8">
     (function() {
-      var el = document.getElementById("mood");
-      var name = document.getElementById("mood-name");
+      var el = document.getElementById("rate");
+      var name = document.getElementById("rate-label");
       var ranges = {
         5: 'Desperately Unhappy',
         15: 'Very Unhappy',
@@ -52,4 +52,5 @@
     }());
 
   </script>
+  </body>
 </html>

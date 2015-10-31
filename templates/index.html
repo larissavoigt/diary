@@ -4,14 +4,29 @@
     {{template "head"}}
     <title>MyDiary</title>
   </head>
-  <body class="mdl-layout mdl-js-layout" id="minimal">
-    <div class="wrapper">
+  <body id="home">
+
+    <div class="content">
       <h1><img src="/assets/imgs/logo.png" alt="MyDiary Logo"/></h1>
-      <p class="lead">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-      <a href="{{.FacebookURL}}" id="facebook-login" class="mdl-button mdl-button--raised mdl-button--colored">
-        Connect with Facebook
-      </a>
+      <p class="content-padded">Lorem Ipsum dolor asimet</p>
+      <div class="card">
+        <ul class="table-view">
+          <li class="table-view-cell">
+            <a class="push-right" href="{{.FacebookURL}}" id="facebook-login">
+              <strong>Connect with Facebook</strong>
+            </a>
+          </li>
+        </ul>
+      </div>
     </div>
-    {{template "footer"}}
+
+    <nav class="bar bar-tab">
+      <a class="tab-item active" href="http://github.com/larissavoigt">
+        About
+      </a>
+      <a class="tab-item" href="mailto:hi@larissavoigt.com">
+        Contact
+      </a>
+    </nav>
   </body>
 </html>
