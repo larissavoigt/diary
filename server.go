@@ -18,8 +18,8 @@ var (
 	env    = flag.String("env", "development", "Environment: development or production")
 	domain = flag.String("domain", "http://localhost", "Site domain")
 	port   = flag.String("port", "3000", "Server port")
-	client = flag.String("facebook-id", "1629858967301577", "Facebook Client ID")
-	secret = flag.String("facebook-secret", "36b8b62d4a6d62f3e845a2682698749d", "Facebook Client Secret")
+	client = flag.String("facebook-id", "1631096750511132", "Facebook Client ID")
+	secret = flag.String("facebook-secret", "1e746ac5dc6200ff3a8badcf9770fb8f", "Facebook Client Secret")
 )
 
 func init() {
