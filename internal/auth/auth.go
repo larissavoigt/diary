@@ -2,6 +2,7 @@ package auth
 
 import (
 	"errors"
+	"flag"
 	"fmt"
 	"net/http"
 
@@ -16,12 +17,21 @@ import (
 
 var config *oauth2.Config
 
+var (
+	env    = flag.String("env", "development", "Environment: development or production")
+	domain = flag.String("domain", "http://localhost", "Site domain")
+	port   = flag.String("port", "3000", "Server port")
+	client = flag.String("facebook-id", "1629858967301577", "Facebook Client ID")
+	secret = flag.String("facebook-secret", "36b8b62d4a6d62f3e845a2682698749d", "Facebook Client Secret")
+)
+
 func init() {
+	flag.Parse()
 	config = &oauth2.Config{
 		Endpoint:     facebook.Endpoint,
-		ClientID:     "1629858967301577",
-		ClientSecret: "36b8b62d4a6d62f3e845a2682698749d",
-		RedirectURL:  fmt.Sprintf("%s/auth", "http://localhost:3000"),
+		ClientID:     *client,
+		ClientSecret: *secret,
+		RedirectURL:  fmt.Sprintf("%s:%s/auth", *domain, *port),
 	}
 }
 
