@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/larissavoigt/diary/internal/entry"
 	"github.com/larissavoigt/diary/internal/user"
 )
 import _ "github.com/go-sql-driver/mysql"
@@ -71,6 +72,25 @@ func CreateEntry(id int64, rate, desc string) (string, error) {
 		return "", err
 	}
 	return strconv.FormatInt(e, 10), nil
+}
+
+func FindUserEntries(id int64) ([]entry.Entry, error) {
+	var entries []entry.Entry
+	rows, err := db.Query("select id, rate, description from entries where user_id = ? ORDER BY id DESC LIMIT 10", id)
+	if err != nil {
+		return entries, err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		e := entry.Entry{}
+		err := rows.Scan(&e.ID, &e.Rate, &e.Description)
+		if err != nil {
+			return entries, err
+		}
+		entries = append(entries, e)
+	}
+	err = rows.Err()
+	return entries, err
 }
 
 func getFBInfo(token string) (*fbUser, error) {

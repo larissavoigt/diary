@@ -35,9 +35,14 @@ func main() {
 
 				switch r.URL.Path[len("/entries/"):] {
 				case "":
-					fmt.Fprintf(w, "list")
+					entries, err := db.FindUserEntries(u.ID)
+					if err != nil {
+						tpl.Error(w, err)
+					} else {
+						tpl.Render(w, "entries", entries)
+					}
 				case "new":
-					tpl.Render(w, "entry", u)
+					tpl.Render(w, "new_entry", u)
 				default:
 					fmt.Fprintf(w, "yay")
 				}
@@ -45,11 +50,11 @@ func main() {
 			case "POST":
 				rate := r.FormValue("rate")
 				desc := r.FormValue("description")
-				e, err := db.CreateEntry(u.ID, rate, desc)
+				_, err := db.CreateEntry(u.ID, rate, desc)
 				if err != nil {
 					tpl.Error(w, err)
 				} else {
-					http.Redirect(w, r, "/entries/"+e, 302)
+					http.Redirect(w, r, "/entries", http.StatusFound)
 				}
 			default:
 				http.Error(w, "", http.StatusMethodNotAllowed)
