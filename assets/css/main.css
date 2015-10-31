@@ -134,3 +134,12 @@ input[type=range]:focus::-ms-fill-lower {
 input[type=range]:focus::-ms-fill-upper {
   background: #367ebd;
 }
+
+/* fix fade transition */
+.content.fade {
+  left: 0;
+  -webkit-transition: opacity 90ms;
+  -moz-transition: opacity 90ms;
+  transition: opacity 90ms;
+  opacity: 0;
+}

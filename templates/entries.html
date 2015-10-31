@@ -2,13 +2,15 @@
 <html>
   <head>
     {{ template "head"}}
+    <title>Recent Entries - MyDiary</title>
   </head>
   <body>
-    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-      {{ template "header" }}
-      <main class="mdl-layout__content">
-      <div class="page-content">
-        <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+    {{ template "header" }}
+
+    <div class="content">
+
+      <div class="content-padded">
+        <table>
           <thead>
             <tr>
               <th>#</th>
@@ -27,9 +29,8 @@
           </tbody>
         </table>
       </div>
-      </main>
-      {{ template "footer" }}
+
     </div>
+
   </body>
-  </script>
 </html>
