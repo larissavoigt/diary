@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"net/http"
 
@@ -13,7 +14,20 @@ import (
 	"github.com/rs/xhandler"
 )
 
+var (
+	env    = flag.String("env", "development", "Environment: development or production")
+	domain = flag.String("domain", "http://localhost", "Site domain")
+	port   = flag.String("port", "3000", "Server port")
+	client = flag.String("facebook-id", "1629858967301577", "Facebook Client ID")
+	secret = flag.String("facebook-secret", "36b8b62d4a6d62f3e845a2682698749d", "Facebook Client Secret")
+)
+
+func init() {
+	flag.Parse()
+}
+
 func main() {
+	auth.Config(*domain, *port, *client, *secret)
 	tpl := templates.New("templates")
 
 	// chain authenticated middleware
@@ -104,5 +118,5 @@ func main() {
 		}
 	})
 
-	http.ListenAndServe(":3000", nil)
+	http.ListenAndServe(":"+*port, nil)
 }
