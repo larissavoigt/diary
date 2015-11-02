@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    {{ template "head"}}
+    <title>Ratings Graph - MyDiary</title>
+  </head>
+  <body>
+    {{ template "header" }}
+
+    <div class="content">
+
+      <script type="text/javascript" charset="utf-8">
+        var graphData = {{.}};
+      </script>
+
+      <canvas id="graph"></canvas>
+
+      </div>
+
+    </div>
+
+    {{ template "footer" }}
+  </body>
+</html>

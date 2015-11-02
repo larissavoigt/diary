@@ -75,9 +75,9 @@ func CreateEntry(id int64, rate, desc string) (string, error) {
 	return strconv.FormatInt(e, 10), nil
 }
 
-func FindUserEntries(id int64) ([]entry.Entry, error) {
+func FindEntries(id int64, count int) ([]entry.Entry, error) {
 	var entries []entry.Entry
-	rows, err := db.Query("select id, rate, description, created_at from entries where user_id = ? ORDER BY id DESC LIMIT 10", id)
+	rows, err := db.Query("select id, rate, description, created_at from entries where user_id = ? ORDER BY id DESC LIMIT ?", id, count)
 	if err != nil {
 		return entries, err
 	}

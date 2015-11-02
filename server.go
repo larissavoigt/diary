@@ -1,14 +1,17 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
+	"html/template"
 	"net/http"
 
 	"golang.org/x/net/context"
 
 	"github.com/larissavoigt/diary/internal/auth"
 	"github.com/larissavoigt/diary/internal/db"
+	"github.com/larissavoigt/diary/internal/entry"
 	"github.com/larissavoigt/diary/internal/templates"
 	"github.com/larissavoigt/diary/internal/user"
 	"github.com/rs/xhandler"
@@ -59,7 +62,7 @@ func main() {
 
 				switch r.URL.Path[len("/entries/"):] {
 				case "":
-					entries, err := db.FindUserEntries(u.ID)
+					entries, err := db.FindEntries(u.ID, 20)
 					if err != nil {
 						tpl.Error(w, err)
 					} else {
@@ -80,6 +83,26 @@ func main() {
 				} else {
 					http.Redirect(w, r, "/entries", http.StatusFound)
 				}
+			default:
+				http.Error(w, "", http.StatusMethodNotAllowed)
+			}
+		})))
+
+	http.Handle("/stats/", c.Handler(
+		xhandler.HandlerFuncC(func(ctx context.Context, w http.ResponseWriter, r *http.Request) {
+			u := ctx.Value("user").(*user.User)
+
+			switch r.Method {
+			case "GET":
+				entries, err := db.FindEntries(u.ID, 30)
+				if err == nil {
+					json, err := json.Marshal(entry.GroupByRating(entries))
+					if err == nil {
+						tpl.Render(w, "graph", template.JS(json))
+						return
+					}
+				}
+				tpl.Error(w, err)
 			default:
 				http.Error(w, "", http.StatusMethodNotAllowed)
 			}

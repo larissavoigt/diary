@@ -9,28 +9,21 @@
 
     <div class="content">
 
-      <div class="content-padded">
-        <table>
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Rate</th>
-              <th>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            {{ range . }}
-            <tr>
-              <td>{{.Timestamp}}</td>
-              <td>{{.Rate}}</td>
-              <td>{{.Description.Value}}</td>
-            </tr>
-            {{ end }}
-          </tbody>
-        </table>
+      <ul class="table-view">
+        {{ range . }}
+        <li class="table-view-cell">
+          <a class="navigate-right">
+            <span class="badge">{{.Rate}}</span>
+            {{.Timestamp}}
+          </a>
+        </li>
+        {{ end }}
+      </ul>
+
       </div>
 
     </div>
 
+    {{ template "footer" }}
   </body>
 </html>

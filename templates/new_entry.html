@@ -23,33 +23,6 @@
 
     </div>
 
-  <script type="text/javascript" charset="utf-8">
-    (function() {
-      var el = document.getElementById("rate");
-      var name = document.getElementById("rate-label");
-      var ranges = {
-        5: 'Desperately Unhappy',
-        15: 'Very Unhappy',
-        25: 'Unhappy',
-        35: 'Passable',
-        45: 'Quite OK',
-        55: 'OK',
-        65: 'Content',
-        75: 'Cheerful',
-        85: 'Happy',
-        95: 'Delighted',
-        100: 'Blissful'
-      };
-      el.oninput = function() {
-        var v = parseInt(el.value, 10);
-        for (var r in ranges) {
-          if (v <= r) {
-            name.innerHTML = ranges[r];
-            break;
-          }
-        }
-      };
-    }());
-  </script>
+    {{ template "footer" }}
   </body>
 </html>
